@@ -25,7 +25,8 @@ switch_init()			/* setup switch */
   P2IE |= SWITCHES;		/* enable interrupts from switches */
   P2OUT |= SWITCHES;		/* pull-ups for switches */
   P2DIR &= ~SWITCHES;		/* set switches' bits for input */
-  switch_update_interrupt_sense();  
+  switch_update_interrupt_sense();
+  led_update();
 }
 
 void
@@ -37,14 +38,12 @@ switch_interrupt_handler()
   switch2_state_down = (p2val & SW2) ? 0 : 1;
   switch3_state_down = (p2val & SW3) ? 0 : 1;
   switch4_state_down = (p2val & SW4) ? 0 : 1;
-  
-}  
-  if(switch1_state_down){
-    switch_state_changed = 1;
-    toggle_led();
-  }
 
-  if(switch2_state_down) {
-    switch_state_changed = 1;
+  if (switch1_state_down) {
+    toggle_led();
+    }
+
+  else if (switch2_state_down) {
     dim();
-  }
+   }
+}

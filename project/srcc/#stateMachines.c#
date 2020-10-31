@@ -83,7 +83,7 @@ void led50()
       red_on = 1;
       green_on = 1;
       state = 1;
-      changed = 1;
+      change = 1;
       break;
 
     case 1:
