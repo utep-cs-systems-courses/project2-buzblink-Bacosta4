@@ -5,8 +5,8 @@
 
 //char switch_state_down, switch_state_changed; /* effectively boolean */
 
-char switch1_state,switch2_state,switch3_state,switch4_state;
-switch_state = 0;
+char switch1_state_down,switch2_state_down,switch3_state_down,switch4_state_down;
+
 
 static char 
 switch_update_interrupt_sense()
@@ -25,7 +25,7 @@ switch_init()			/* setup switch */
   P2IE |= SWITCHES;		/* enable interrupts from switches */
   P2OUT |= SWITCHES;		/* pull-ups for switches */
   P2DIR &= ~SWITCHES;		/* set switches' bits for input */
-  switch_update_interrupt_sense();
+  switch_update_interrupt_sense();  
 }
 
 void
@@ -33,19 +33,18 @@ switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
 
-  switch1_state = (p2val & SW1) ? 0 : 1;  // which button is being pressed
-  switch2_state = (p2val & SW2) ? 0 : 1;
-  //switch3_state = (p2val & SW3) ? 0 : 1;
-  // switch4_state = (p2val & SW4) ? 0 : 1;
-
-  if (switch1_state) {   // which button was pressed
-    dim();
-    switch_state = 1;
+  switch1_state_down = (p2val & SW1) ? 0 : 1; /* 0 when SW1 is up */
+  switch2_state_down = (p2val & SW2) ? 0 : 1;
+  switch3_state_down = (p2val & SW3) ? 0 : 1;
+  switch4_state_down = (p2val & SW4) ? 0 : 1;
+  
+}  
+  if(switch1_state_down){
+    switch_state_changed = 1;
+    toggle_led();
   }
 
-  // if (switch2_state) {
-  //dim();
-  //switch_state = 2;
-  //  }
-  
-}
+  if(switch2_state_down) {
+    switch_state_changed = 1;
+    dim();
+  }
