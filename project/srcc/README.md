@@ -16,6 +16,6 @@ You may use **mspdebug rf2500 "erase"** to clear a program from the MSP430.
 ## Button Functions:
 The green board contains 4 buttons (s1-s4). Each button contains a different method.
 - S1: This will toggle between red and green.
-- S2: This will pay a siren, toggle between high and low buzzer
-- S3: This will dim the led.
+- S2: This will pay a siren, hold toggle to go from high to low buzzer ho
+- S3: This will dim the led while hold.
 - S4: This will turn both green and red led and turn off the buzzer.
