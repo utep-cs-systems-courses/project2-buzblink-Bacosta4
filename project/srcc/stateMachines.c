@@ -2,6 +2,11 @@
 #include "stateMachines.h"
 #include "led.h"
 #include "switches.h"
+#include "buzzer.h"
+
+
+static char sb = 1;
+static char state = 0;
 
 char toggle_red()		/* always red led! */
 {
@@ -19,10 +24,15 @@ char toggle_green()	/* always green led!  */
   led_update();
 }
 
+char toggle_both() {
+  green_on = 1;
+  red_on = 1;
+  led_changed = 1;
+  led_update();
+}
+
 void toggle_led()
-{
-  static char state = 0;
-  
+{  
   switch(state) {
 
   case 0:
@@ -38,123 +48,124 @@ void toggle_led()
 }
 
 void led25()
-{
-    char changed = 0;
-    static char state = 0;
-    
+{   
     switch(state) {
       
       case 0:
 	red_on = 0;
-	green_on = 0;
 	state = 1;
-	changed = 1;
 	break;
 
       case 1:
 	red_on = 0;
-	green_on = 0;
 	state = 2;
 	break;
 
       case 2:
 	red_on = 0;
-	green_on = 0;
 	state = 3;
 	break;
 
       case 3:
         red_on = 1;
-        green_on = 1;
         state = 0;
-	changed = 1;
-      }
-    led_changed = changed;
-    led_update();
+    } 
 }
 
 void led50()
-{
-  char changed = 0;
-  static char state = 0;
-  
+{ 
   switch(state) {
     case 0:
       red_on = 1;
-      green_on = 1;
       state = 1;
-      changed = 1;
       break;
 
     case 1:
       red_on = 0;
-      green_on = 0;
       state = 0;
-      changed = 1;
       break;
     }
-  led_changed = changed;
-  led_update();
 }
 
 void led75()
-{
-  char changed = 0;
-  static char state = 0;
-  
+{ 
   switch(state) {
     
   case 0:
-    red_on = 0;
-    green_on = 0;
+    red_on = 1;
     state = 1;
-    changed = 1;
     break;
     
   case 1:
     red_on = 1;
-    green_on = 1;
     state = 2;
-    changed = 1;
     break;
     
   case 2:
     red_on = 1;
-    green_on = 1;
     state = 3;
     break;
 
   case 3:
-    red_on = 1;
-    green_on = 1;
+    red_on = 0;
     state = 0;
   }
-  led_changed = changed;
-  led_update();
 }
 
 void dim()
 {
   static char state = 0;
-  switch(state) {
+  switch (state){
   case 0:
-    led50();
-    led50();
+    toggle_red();
     state = 1;
     break;
-
+    
   case 1:
-    led75();
-    led75();
+    led25();
     state = 2;
     break;
 
   case 2:
-    led25();
-    led25();
+    led50();
+    state = 3;
+
+  case 3:
+    led75();
     state = 0;
     break;
+ }
+}
+
+void buzzer() {
+  static int x = 500;
+  if(sb) {
+    toggle_red();
+    x += 225;
   }
-  led_changed = 1;
-  led_update();
+  else { 
+    toggle_green();
+    x -= 450;
+  }
+  short cycles = 2000000 / x;
+  buzzer_set_period(cycles);
+}
+
+void siren() {
+
+  switch(state) {
+
+  case 0:
+    sb = 1;
+    state++;
+    break;
+    
+  case 1:
+    sb = 0;
+    state = 0;
+    break;
+    
+  default:
+    break;
+  }
 }

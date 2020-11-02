@@ -39,11 +39,20 @@ switch_interrupt_handler()
   switch3_state_down = (p2val & SW3) ? 0 : 1;
   switch4_state_down = (p2val & SW4) ? 0 : 1;
 
-  if (switch1_state_down) {
+  if (switch1_state_down){
     toggle_led();
-    }
+  }
 
   else if (switch2_state_down) {
+    siren();
+  }
+
+  else if(switch3_state_down){
     dim();
-   }
+  }
+
+  else if(switch4_state_down){
+    buzzer_set_period(0);
+    toggle_both();
+  }
 }
