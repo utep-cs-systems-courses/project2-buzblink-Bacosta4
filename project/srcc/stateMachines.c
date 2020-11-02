@@ -109,20 +109,23 @@ void led75()            /* Led at 75% */
 
 void dim()                    /* Dims the Led lights 25% to 50% to 75% */
 {
-  static char st = 0;
+  static char st = 0;            // st is used for switch/ case
   switch (st){
 
   case 0:
+    led50();
     led50();
     st = 1;
     break;
     
   case 1:
     led75();
+    led75();
     st = 2; 
     break;
 
   case 2:
+    led25();
     led25();
     st = 0;
     break;
