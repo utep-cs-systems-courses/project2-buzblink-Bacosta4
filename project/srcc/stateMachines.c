@@ -16,7 +16,7 @@ char toggle_red()		/* always red led! */
   led_update();
 }
 
-char toggle_green()	/* always green led!  */
+char toggle_green()	       /* always green led!  */
 {
   green_on = 1;
   red_on = 0;
@@ -24,14 +24,14 @@ char toggle_green()	/* always green led!  */
   led_update();
 }
 
-char toggle_both() {
+char toggle_both() {         /*turn both green & red on */
   green_on = 1;
   red_on = 1;
   led_changed = 1;
   led_update();
 }
 
-void toggle_led()
+void toggle_led()           /* Turns green then red vise versa */
 {  
   switch(state) {
 
@@ -47,8 +47,8 @@ void toggle_led()
   }
 }
 
-void led25()
-{   
+void led25()               /* Led at 25% */
+ {   
     switch(state) {
       
       case 0:
@@ -62,17 +62,14 @@ void led25()
 	break;
 
       case 2:
-	red_on = 0;
-	state = 3;
+	red_on = 1;
+	state = 0;
 	break;
-
-      case 3:
-        red_on = 1;
-        state = 0;
-    } 
+    }
+    led_update();
 }
 
-void led50()
+void led50()             /* Led at 50% */
 { 
   switch(state) {
     case 0:
@@ -85,9 +82,10 @@ void led50()
       state = 0;
       break;
     }
+  led_update();
 }
 
-void led75()
+void led75()            /* Led at 75% */
 { 
   switch(state) {
     
@@ -102,49 +100,43 @@ void led75()
     break;
     
   case 2:
-    red_on = 1;
-    state = 3;
-    break;
-
-  case 3:
     red_on = 0;
     state = 0;
+    break;
   }
+  led_update();
 }
 
-void dim()
+void dim()                    /* Dims the Led lights 25% to 50% to 75% */
 {
-  static char state = 0;
-  switch (state){
+  static char st = 0;
+  switch (st){
+
   case 0:
-    toggle_red();
-    state = 1;
+    led50();
+    st = 1;
     break;
     
   case 1:
-    led25();
-    state = 2;
+    led75();
+    st = 2; 
     break;
 
   case 2:
-    led50();
-    state = 3;
-
-  case 3:
-    led75();
-    state = 0;
+    led25();
+    st = 0;
     break;
  }
 }
 
-void buzzer() {
+void buzzer() {              
   static int x = 500;
-  if(sb) {
+  if(sb) {                        /* Goes up for buzzer */
     toggle_red();
     x += 225;
   }
   else { 
-    toggle_green();
+    toggle_green();               /* Goes down for buzzer */
     x -= 450;
   }
   short cycles = 2000000 / x;

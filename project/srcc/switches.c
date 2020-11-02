@@ -39,19 +39,19 @@ switch_interrupt_handler()
   switch3_state_down = (p2val & SW3) ? 0 : 1;
   switch4_state_down = (p2val & SW4) ? 0 : 1;
 
-  if (switch1_state_down){
+  if (switch1_state_down){         // If button 1 is pressed
     toggle_led();
   }
 
-  else if (switch2_state_down) {
+  else if (switch2_state_down) {   // If button 2 is pressed
     siren();
   }
 
-  else if(switch3_state_down){
+  else if(switch3_state_down) {    // If button 3 is pressed
     dim();
   }
 
-  else if(switch4_state_down){
+  else if(switch4_state_down) {  // If button 4 is pressed
     buzzer_set_period(0);
     toggle_both();
   }
